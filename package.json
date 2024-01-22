@@ -37,5 +37,10 @@
       "prettier --write",
       "eslint --fix --max-warnings=0"
     ]
+  },
+  "engines": {
+    "node": ">=18",
+    "yarn": ">=1.22",
+    "npm": "please-use-yarn"
   }
 }

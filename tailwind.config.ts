@@ -8,6 +8,12 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      colors: {
+        'freemed-red': {
+          light: '#fbd7d3',
+          DEFAULT: '#ed3827',
+        },
+      },
       fontFamily: {
         sans: ['Pretendard', 'sans-serif'],
         neo: ['NanumSquareNeoVariable', 'sans-serif'],

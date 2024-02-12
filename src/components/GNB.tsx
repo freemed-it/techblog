@@ -26,6 +26,14 @@ const GNB = () => {
     }
   }, [isMobileOpen])
 
+  const handleOpen = () => {
+    setIsMobileOpen(true)
+  }
+
+  const handleClose = () => {
+    setIsMobileOpen(false)
+  }
+
   return (
     <header className="fixed top-0 z-50 w-full border-b border-gray-200 bg-white">
       <nav className="mx-auto flex h-16 items-center justify-between px-5 font-neo md:px-20 lg:max-w-7xl">
@@ -64,29 +72,31 @@ const GNB = () => {
           </Link>
         </div>
         <div className="md:hidden">
-          <button onClick={() => setIsMobileOpen(true)} className="flex md:hidden">
+          <button onClick={handleOpen} className="flex md:hidden">
             <Image src="menu-bar.svg" alt="열기" width={32} height={32} />
           </button>
           <div
-            onClick={() => setIsMobileOpen(false)}
+            onClick={handleClose}
             className={`${isMobileOpen ? 'block' : 'hidden'} fixed left-0 top-0 h-full w-full bg-black/[0.6] md:hidden`}
           />
           <div
             className={`${isMobileOpen ? 'right-0' : 'right-[-264px]'} fixed top-0 flex h-full w-[264px] flex-col justify-between overflow-y-scroll bg-white pb-4 pt-7 transition-all duration-300`}
           >
             <div className="flex flex-col items-end">
-              <button onClick={() => setIsMobileOpen(false)} className="mb-10 mr-5">
+              <button onClick={handleClose} className="mb-10 mr-5">
                 <Image src="close.svg" alt="닫기" width={24} height={24} />
               </button>
               <Link
                 href="/tech"
                 className={`${(path === 'tech' || path === '') && 'text-freemed-red'} subTitle2 w-full border-b border-gray-200 py-4 pl-5 font-semibold`}
+                onClick={handleClose}
               >
                 개발
               </Link>
               <Link
                 href="/design"
                 className={`${path === 'design' && 'text-freemed-red'} subTitle2 w-full border-b border-gray-200 py-4 pl-5 font-semibold`}
+                onClick={handleClose}
               >
                 디자인
               </Link>

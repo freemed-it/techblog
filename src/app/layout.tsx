@@ -1,3 +1,5 @@
+import Footer from '@/components/Footer'
+import GNB from '@/components/GNB'
 import type { Metadata } from 'next'
 import './globals.css'
 
@@ -9,7 +11,11 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <GNB />
+        <main className="mx-auto pt-16 md:max-w-7xl">{children}</main>
+        <Footer />
+      </body>
     </html>
   )
 }

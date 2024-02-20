@@ -19,6 +19,11 @@
   html {
     @apply text-gray-900;
   }
+
+  * {
+    margin: 0;
+    padding: 0;
+  }
 }
 
 @layer components {

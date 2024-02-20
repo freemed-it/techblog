@@ -1,8 +1,8 @@
 import PostCard from '@/components/PostCard'
 import { getAllPostsInDirectory } from '@/utils/posts'
 
-export default async function Main() {
-  const posts = getAllPostsInDirectory('tech')
+export default async function Posts() {
+  const posts = getAllPostsInDirectory('design')
   return (
     <section className="mx-auto flex flex-col items-center px-5 md:max-w-3xl">
       <ul className="w-full">

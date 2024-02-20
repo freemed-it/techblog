@@ -1,7 +1,7 @@
 import PostCard from '@/components/PostCard'
 import { getAllPostsInDirectory } from '@/utils/posts'
 
-export default async function Main() {
+export default async function Posts() {
   const posts = getAllPostsInDirectory('tech')
   return (
     <section className="mx-auto flex flex-col items-center px-5 md:max-w-3xl">

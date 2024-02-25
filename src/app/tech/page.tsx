@@ -8,7 +8,7 @@ export default async function Posts() {
     <>
       <Header />
       <section className="mx-auto flex flex-col items-center px-5 md:max-w-3xl">
-        <ul className="w-full">
+        <ul className="w-full pb-14">
           {posts.map(post => (
             <PostCard key={post.fields.slug} post={post} />
           ))}

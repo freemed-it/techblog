@@ -20,7 +20,7 @@ const ShareButton = () => {
       className="subTitle2 inline-flex items-center rounded-md bg-freemed-red px-6 py-2 text-white"
       onClick={() => handleCopyClipBoard(`https://tech.freemed.or.kr${pathname}`)}
     >
-      <Image src="external-link.svg" alt="" width={16} height={16} className="mr-2" />
+      <Image src="/external-link.svg" alt="" width={16} height={16} className="mr-2" />
       공유하기
     </button>
   )

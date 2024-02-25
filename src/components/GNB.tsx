@@ -39,7 +39,7 @@ const GNB = () => {
       <nav className="mx-auto flex h-16 items-center justify-between px-5 font-neo md:px-20 lg:max-w-7xl">
         <h1>
           <Link href="/tech" className="flex items-center text-base leading-4">
-            <Image src="logo.svg" alt="FREEMED" width={111} height={17} className="mr-2" />
+            <Image src="/logo.svg" alt="FREEMED" width={111} height={17} className="mr-2" />
             Tech
           </Link>
         </h1>
@@ -68,12 +68,12 @@ const GNB = () => {
             className="subTitle2 ml-5 flex items-center font-normal text-gray-700"
           >
             프리메드 홈페이지
-            <Image src="arrow-up-right.svg" alt="바로가기" width={24} height={24} />
+            <Image src="/arrow-up-right.svg" alt="바로가기" width={24} height={24} />
           </Link>
         </div>
         <div className="md:hidden">
           <button onClick={handleOpen} className="flex md:hidden">
-            <Image src="menu-bar.svg" alt="열기" width={32} height={32} />
+            <Image src="/menu-bar.svg" alt="열기" width={32} height={32} />
           </button>
           <div
             onClick={handleClose}
@@ -84,7 +84,7 @@ const GNB = () => {
           >
             <div className="flex flex-col items-end">
               <button onClick={handleClose} className="mb-10 mr-5">
-                <Image src="close.svg" alt="닫기" width={24} height={24} />
+                <Image src="/close.svg" alt="닫기" width={24} height={24} />
               </button>
               <Link
                 href="/tech"
@@ -106,7 +106,7 @@ const GNB = () => {
               target="_blank"
               className="subTitle2 flex items-center pl-5 font-normal text-gray-700"
             >
-              프리메드 홈페이지 <Image src="arrow-up-right.svg" alt="바로가기" width={24} height={24} />
+              프리메드 홈페이지 <Image src="/arrow-up-right.svg" alt="바로가기" width={24} height={24} />
             </Link>
           </div>
         </div>

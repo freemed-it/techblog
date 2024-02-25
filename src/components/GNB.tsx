@@ -53,7 +53,7 @@ const GNB = () => {
           >
             개발
           </Link>
-          <Link
+          {/* <Link
             href="/design"
             className={`${
               path === 'design' &&
@@ -61,7 +61,7 @@ const GNB = () => {
             } subTitle2 relative mx-3 px-px font-semibold`}
           >
             디자인
-          </Link>
+          </Link> */}
           <Link
             href="https://freemed.or.kr"
             target="_blank"
@@ -93,13 +93,13 @@ const GNB = () => {
               >
                 개발
               </Link>
-              <Link
+              {/* <Link
                 href="/design"
                 className={`${path === 'design' && 'text-freemed-red'} subTitle2 w-full border-b border-gray-200 py-4 pl-5 font-semibold`}
                 onClick={handleClose}
               >
                 디자인
-              </Link>
+              </Link> */}
             </div>
             <Link
               href="https://freemed.or.kr"

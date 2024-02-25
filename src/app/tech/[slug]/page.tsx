@@ -1,6 +1,7 @@
 import Markdown from 'react-markdown'
 import CodeBlock from '@/components/Code'
 import Pre from '@/components/Pre'
+import ShareButton from '@/components/ShareButton'
 import { findPostByType, getAllPosts } from '@/utils/posts'
 import { format } from 'date-fns'
 import Image from 'next/image'
@@ -44,7 +45,7 @@ export default async function Post({ params }: { params: { type: string; slug: s
   const updatedAt = format(new Date(date), 'yyyy년 MM월 dd일')
   return (
     <div className="mx-auto px-5 md:max-w-3xl">
-      <article>
+      <article className="mb-20">
         <header>
           <Image
             src={`/${thumbnail}`}
@@ -83,6 +84,9 @@ export default async function Post({ params }: { params: { type: string; slug: s
           </Markdown>
         </div>
       </article>
+      <div className="border-t border-t-gray-300 py-14 text-center">
+        <ShareButton />
+      </div>
     </div>
   )
 }

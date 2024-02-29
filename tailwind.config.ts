@@ -25,11 +25,11 @@ const config: Config = {
       typography: (theme: (arg0: string) => any) => ({
         DEFAULT: {
           css: {
-            color: theme('colors.gray.700'),
+            color: theme('colors.gray.900'),
             a: {
-              color: theme('colors.blue.500'),
+              color: theme('colors.red.500'),
               '&:hover': {
-                color: theme('colors.blue.600'),
+                color: theme('colors.red.600'),
               },
               code: { color: theme('colors.blue.400') },
             },
@@ -52,7 +52,8 @@ const config: Config = {
               color: theme('colors.gray.900'),
             },
             code: {
-              color: theme('colors.pink.500'),
+              color: theme('colors.red.500'),
+              backgroundColor: '#F4F4F5',
               fontWeight: '0',
               paddingLeft: '4px',
               paddingRight: '4px',
@@ -61,24 +62,28 @@ const config: Config = {
               borderRadius: '0.2rem',
               wordBreak: 'break-word',
             },
-            'code:before': {
+            'code::before': {
               content: 'none',
             },
-            'code:after': {
+            'code::after': {
               content: 'none',
             },
             hr: { borderColor: theme('colors.gray.200') },
-            'ol li:before': {
+            'ol li::before': {
               fontWeight: '600',
-              color: theme('colors.gray.500'),
-            },
-            'ul li:before': {
-              backgroundColor: theme('colors.gray.500'),
-            },
-            strong: { color: theme('colors.gray.600') },
-            blockquote: {
               color: theme('colors.gray.900'),
-              borderLeftColor: theme('colors.gray.200'),
+            },
+            'ul li::before': {
+              backgroundColor: theme('colors.gray.900'),
+            },
+            'li::marker': {
+              color: theme('colors.gray.900'),
+            },
+            strong: { color: theme('colors.gray.900') },
+            blockquote: {
+              fontStyle: 'none',
+              color: theme('colors.gray.900'),
+              borderLeftColor: theme('colors.red.500'),
             },
           },
         },

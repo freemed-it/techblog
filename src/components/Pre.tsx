@@ -5,11 +5,11 @@ export default function Pre(props: ClassAttributes<HTMLPreElement> & HTMLAttribu
   const language = (props?.children as ReactElement)?.props?.className?.replace('language-', '')
   if (!language) return <pre {...props} />
   return (
-    <div data-code="" className="flex flex-col rounded-lg bg-[#1e1e1e]">
+    <div data-code="" className="flex flex-col rounded-lg bg-[#F4F4F5]">
       <div className="flex items-center justify-between px-4 py-2">
-        {/* <div className="flex items-center gap-4 text-gray-400">
+        <div className="flex items-center gap-4 text-gray-400">
           <span className="text-xs">{language}</span>
-        </div> */}
+        </div>
       </div>
       {props.children}
     </div>

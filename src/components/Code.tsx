@@ -1,6 +1,6 @@
 import { ClassAttributes, HTMLAttributes } from 'react'
 import { ExtraProps } from 'react-markdown'
-import '@/styles/vsdark.css'
+import '@/styles/vslight.css'
 import { getCurrentLanguage } from '@/utils/syntax'
 import Prism from 'prismjs'
 import 'prismjs/components/prism-bash.min'

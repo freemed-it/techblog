@@ -23,19 +23,22 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { slug: string } }) {
   const { slug } = params
   const post = await findPostByType('design', slug)
-  if (!post) notFound()
-  if (!post) {
-    return {
-      title: 'Post Not Found',
-    }
-  }
 
   return {
-    title: post.frontMatter.title,
-    thumnail: post.frontMatter.thumbnail,
-    profile: post.frontMatter.profile,
+    title: post?.frontMatter.title,
+    description: post?.frontMatter.description,
+    keywords: post?.frontMatter.tags,
+    openGraph: {
+      title: post?.frontMatter.title,
+      description: post?.frontMatter.description,
+      images: post?.frontMatter.thumbnail,
+    },
+    alternates: {
+      canonical: `/design/${slug}`,
+    },
   }
 }
+
 export default async function Post({ params }: { params: { type: string; slug: string } }) {
   const { slug } = params
   const post = await findPostByType('design', slug)
@@ -45,6 +48,7 @@ export default async function Post({ params }: { params: { type: string; slug: s
     body,
   } = post
   const updatedAt = format(new Date(date), 'yyyy년 MM월 dd일')
+
   return (
     <div className="mx-auto px-5 md:max-w-3xl">
       <article>

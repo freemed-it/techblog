@@ -1,6 +1,7 @@
 import Footer from '@/components/Footer'
 import GNB from '@/components/GNB'
 import type { Metadata } from 'next'
+import Script from 'next/script'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -26,6 +27,16 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ko">
+      <Script src="https://www.googletagmanager.com/gtag/js?id=G-48Y51TQ6X4" strategy="afterInteractive" />
+      <Script id="google-analytics" strategy="afterInteractive">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){window.dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'G-48Y51TQ6X4');
+        `}
+      </Script>
       <body>
         <GNB />
         <main className="mx-auto pt-16 md:max-w-7xl">{children}</main>

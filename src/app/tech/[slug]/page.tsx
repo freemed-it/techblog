@@ -1,5 +1,5 @@
 import Markdown from 'react-markdown'
-import CodeBlock from '@/components/Code'
+import CodeBlock from '@/components/CodeBlock'
 import Pre from '@/components/Pre'
 import ShareButton from '@/components/ShareButton'
 import { findPostByType, getAllPosts } from '@/utils/posts'
@@ -59,7 +59,7 @@ export default async function Post({ params }: { params: { type: string; slug: s
             height={500}
             className="mt-9 h-full w-full rounded-xl object-cover"
           />
-          <h1 className="heading my-5">{title}</h1>
+          <h1 className="heading my-8">{title}</h1>
           <div className="mb-12 flex flex-col items-center justify-center md:flex-row md:justify-start">
             <Image
               src={`/${profile}`}

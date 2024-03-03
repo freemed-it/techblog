@@ -26,7 +26,7 @@ export default function PostCard({ post }: { post: Post }) {
               alt="thumbnail"
               width={1200}
               height={600}
-              className="rounded object-cover md:h-32 md:w-32"
+              className="rounded-lg object-cover md:h-40 md:w-60"
             />
           </div>
         </div>

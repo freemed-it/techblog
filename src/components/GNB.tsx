@@ -38,7 +38,7 @@ const GNB = () => {
     <header className="fixed top-0 z-50 w-full border-b border-gray-200 bg-white">
       <nav className="mx-auto flex h-16 items-center justify-between px-5 font-neo md:px-20 lg:max-w-7xl">
         <h1>
-          <Link href="/tech" className="flex items-center text-base leading-4">
+          <Link href="/" className="flex items-center text-base leading-4">
             <Image src="/logo.svg" alt="FREEMED" width={111} height={17} className="mr-2" />
             Tech
           </Link>
@@ -47,7 +47,7 @@ const GNB = () => {
           <Link
             href="/tech"
             className={`${
-              (path === 'tech' || path === '') &&
+              path === 'tech' &&
               'before:absolute before:bottom-[-8px] before:left-0 before:h-0.5 before:w-full before:bg-freemed-red before:content-[""]'
             } subTitle2 relative mx-3 px-px font-semibold`}
           >
@@ -88,7 +88,7 @@ const GNB = () => {
               </button>
               <Link
                 href="/tech"
-                className={`${(path === 'tech' || path === '') && 'text-freemed-red'} subTitle2 w-full border-b border-gray-200 py-4 pl-5 font-semibold`}
+                className={`${path === 'tech' && 'text-freemed-red'} subTitle2 w-full border-b border-gray-200 py-4 pl-5 font-semibold`}
                 onClick={handleClose}
               >
                 개발

@@ -40,9 +40,9 @@ export default function PostCard({ post }: { post: Post }) {
             href={`/${slug}`}
             className="align-center flex-col justify-between transition ease-in-out hover:text-freemed-red md:order-1 md:mt-0"
           >
-            <h1 className="heading mb-3.5 inline-block">{title}</h1>
+            <h2 className="heading mb-2 inline-block">{title}</h2>
             <div>
-              <p className="body1 mb-3 block text-gray-800">{description}</p>
+              <p className="body1 mb-2 block text-gray-800">{description}</p>
               <time className="body2 text-gray-500" dateTime={updatedAt}>
                 {updatedAt}
               </time>

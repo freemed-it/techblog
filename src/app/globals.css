@@ -30,8 +30,8 @@
 @layer components {
   .heading {
     font-weight: bold;
-    font-size: 32px;
-    line-height: 42px;
+    font-size: 24px;
+    line-height: 32px;
   }
 
   .subTitle1 {

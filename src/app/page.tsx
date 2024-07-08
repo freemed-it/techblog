@@ -1,9 +1,9 @@
 import Header from '@/components/Header'
 import PostCard from '@/components/PostCard'
-import { getAllPostsInDirectory } from '@/utils/posts'
+import { getAllPosts, getAllPostsInDirectory } from '@/utils/posts'
 
 export default async function Main() {
-  const posts = getAllPostsInDirectory('tech')
+  const posts = await getAllPosts()
   return (
     <>
       <Header />

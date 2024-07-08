@@ -13,13 +13,18 @@ export async function findPostByType(type: string, slug: string) {
   return posts.find(post => post.fields.slug === slugs)
 }
 
-export async function getAllPosts(): Promise<Array<Post>> {
-  const postsDirectories = ['tech', 'design'] // Specify the folders
+export async function getAllPosts() {
+  const postsDirectories = ['tech', 'design']
   const allPosts = postsDirectories.flatMap(getAllPostsInDirectory)
-  return allPosts
+
+  const sortedAllPosts = allPosts.sort(
+    (a, b) => new Date(b.frontMatter.date).getTime() - new Date(a.frontMatter.date).getTime()
+  )
+
+  return sortedAllPosts
 }
 
-export function getAllPostsInDirectory(directory: string): Post[] {
+export function getAllPostsInDirectory(directory: string) {
   const POST_PATH = `${process.cwd()}${DIR_REPLACE_STRING}/${directory}`
   const files = sync(`${POST_PATH}/*.md*`).reverse()
 
@@ -45,7 +50,7 @@ export function getAllPostsInDirectory(directory: string): Post[] {
           fields: {
             slug,
           },
-          path: filePath, // Store the full file path if needed
+          path: filePath,
           slug: '',
           type: '',
           title: '',

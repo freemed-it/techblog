@@ -17,7 +17,7 @@ const ShareButton = () => {
 
   return (
     <button
-      className="subTitle2 inline-flex items-center rounded-md bg-freemed-red px-6 py-2 text-white"
+      className="subTitle2 inline-flex h-9 items-center rounded-md bg-freemed-red px-6 text-white"
       onClick={() => handleCopyClipBoard(`https://tech.freemed.or.kr${pathname}`)}
     >
       <Image src="/external-link.svg" alt="" width={16} height={16} className="mr-2" />

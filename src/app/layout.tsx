@@ -1,5 +1,5 @@
-import Footer from '@/components/Footer'
-import GNB from '@/components/GNB'
+import Footer from '@/components/common/Footer'
+import GNB from '@/components/common/GNB'
 import type { Metadata } from 'next'
 import Script from 'next/script'
 import './globals.css'

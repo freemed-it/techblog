@@ -1,9 +1,12 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { CategoryDetail } from '@/config/types'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+
+const categoryList: CategoryDetail[] = [{ dirName: 'tech', publicName: '개발' }]
 
 const GNB = () => {
   const path = usePathname().split('/')[1]
@@ -44,24 +47,18 @@ const GNB = () => {
           </Link>
         </h1>
         <div className="hidden md:flex md:items-center">
-          <Link
-            href="/tech"
-            className={`${
-              path === 'tech' &&
-              'before:absolute before:bottom-[-8px] before:left-0 before:h-0.5 before:w-full before:bg-freemed-red before:content-[""]'
-            } subTitle2 relative mx-3 px-px font-semibold`}
-          >
-            개발
-          </Link>
-          {/* <Link
-            href="/design"
-            className={`${
-              path === 'design' &&
-              'before:absolute before:bottom-[-8px] before:left-0 before:h-0.5 before:w-full before:bg-freemed-red before:content-[""]'
-            } subTitle2 relative mx-3 px-px font-semibold`}
-          >
-            디자인
-          </Link> */}
+          {categoryList.map(cg => (
+            <Link
+              key={cg.dirName}
+              href={`/${cg.dirName}`}
+              className={`${
+                path === `${cg.dirName}` &&
+                'before:absolute before:bottom-[-8px] before:left-0 before:h-0.5 before:w-full before:bg-freemed-red before:content-[""]'
+              } subTitle2 relative mx-3 px-px font-semibold`}
+            >
+              {cg.publicName}
+            </Link>
+          ))}
           <Link
             href="https://freemed.or.kr"
             target="_blank"
@@ -86,20 +83,16 @@ const GNB = () => {
               <button onClick={handleClose} className="mb-10 mr-5">
                 <Image src="/close.svg" alt="닫기" width={24} height={24} />
               </button>
-              <Link
-                href="/tech"
-                className={`${path === 'tech' && 'text-freemed-red'} subTitle2 w-full border-b border-gray-200 py-4 pl-5 font-semibold`}
-                onClick={handleClose}
-              >
-                개발
-              </Link>
-              {/* <Link
-                href="/design"
-                className={`${path === 'design' && 'text-freemed-red'} subTitle2 w-full border-b border-gray-200 py-4 pl-5 font-semibold`}
-                onClick={handleClose}
-              >
-                디자인
-              </Link> */}
+              {categoryList.map(cg => (
+                <Link
+                  key={cg.dirName}
+                  href={`/${cg.dirName}`}
+                  className={`${path === cg.dirName && 'text-freemed-red'} subTitle2 w-full border-b border-gray-200 py-4 pl-5 font-semibold`}
+                  onClick={handleClose}
+                >
+                  {cg.publicName}
+                </Link>
+              ))}
             </div>
             <Link
               href="https://freemed.or.kr"

@@ -9,7 +9,7 @@ const POSTS_PATH = path.join(process.cwd(), BASE_PATH)
 
 export const getPostPaths = (category?: string) => {
   const folder = category || '**'
-  const postPaths: string[] = sync(`${POSTS_PATH}/${folder}/*.mdx`)
+  const postPaths: string[] = sync(`${POSTS_PATH}/${folder}/**/*.mdx`)
   return postPaths
 }
 
@@ -61,12 +61,12 @@ export const getSortedPostList = async (category?: string) => {
 
 export const getCategoryList = () => {
   const cgPaths: string[] = sync(`${POSTS_PATH}/*`)
-  const cgList = cgPaths.map(path => path.split('/').slice(-1)?.[1])
+  const cgList = cgPaths.map(path => path.split('/').slice(-1)?.[0])
   return cgList
 }
 
 export const getPostDetail = async (category: string, slug: string) => {
-  const filePath = `${POSTS_PATH}/${category}/${slug}.mdx`
+  const filePath = `${POSTS_PATH}/${category}/${slug}/index.mdx`
   const detail = await parsePost(filePath)
   return detail
 }

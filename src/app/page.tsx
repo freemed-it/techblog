@@ -1,11 +1,11 @@
 import Header from '@/components/common/Header'
 import { Post } from '@/config/types'
-import { getSortedPostList } from '@/lib/posts'
+import { getPostList } from '@/lib/posts'
 import dynamic from 'next/dynamic'
 
 const PostCard = dynamic(() => import('@/components/post_list/PostCard'), { ssr: false })
 export default async function Main() {
-  const postList = await getSortedPostList()
+  const postList = await getPostList('/')
   return (
     <div>
       <Header />

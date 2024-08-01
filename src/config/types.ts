@@ -14,7 +14,6 @@ export interface Post extends PostMatter {
   slug: string
   categoryPath: string
   content: string
-  categoryPublicName: string
 }
 
 export interface CategoryDetail {

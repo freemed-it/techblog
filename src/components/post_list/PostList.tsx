@@ -1,5 +1,5 @@
 import { Post } from '@/config/types'
-import { getSortedPostList } from '@/lib/posts'
+import { getPostList } from '@/lib/posts'
 import Header from '../common/Header'
 import PostCard from './PostCard'
 
@@ -8,7 +8,7 @@ interface PostListProps {
 }
 
 const PostList = async ({ category }: PostListProps) => {
-  const postList = await getSortedPostList(category)
+  const postList = await getPostList(category)
 
   return (
     <>

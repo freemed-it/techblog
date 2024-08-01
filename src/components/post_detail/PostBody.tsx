@@ -10,7 +10,7 @@ interface Props {
   post: Post
 }
 
-export const PostBody = ({ post }: Props) => {
+const PostBody = ({ post }: Props) => {
   return (
     <MDXRemote
       source={post.content}
@@ -32,3 +32,5 @@ export const PostBody = ({ post }: Props) => {
     />
   )
 }
+
+export default PostBody

@@ -46,7 +46,6 @@ const config: Config = {
               counterReset: 'line',
             },
 
-            // Inline code only
             ':not(pre) > code': {
               fontWeight: 'inherit',
               position: 'relative',
@@ -66,16 +65,19 @@ const config: Config = {
               content: 'none',
             },
 
+            'code[data-line-numbers]': {
+              counterReset: 'line',
+            },
+
             'code[data-line-numbers] > [data-line]::before': {
               counterIncrement: 'line',
               content: 'counter(line)',
 
-              /* Other styling */
               display: 'inline-block',
               width: '1rem',
               marginRight: '1.4rem',
               textAlign: 'right',
-              color: 'lightgrey',
+              color: 'grey',
               fontSize: '0.75rem',
             },
 
@@ -91,8 +93,10 @@ const config: Config = {
               paddingRight: 0,
               paddingLeft: 0,
               color: 'var(--shiki-light)',
-              backgroundColor: '#F8F6F2',
+              backgroundColor: 'var(--shiki-light-bg)',
+              border: '1px solid #e5e7eb',
             },
+
             '.dark pre': {
               backgroundColor: 'var(--shiki-dark-bg)',
               color: 'var(--shiki-dark)',
@@ -112,7 +116,12 @@ const config: Config = {
             },
 
             '[data-highlighted-line]': {
-              backgroundColor: 'rgba(253, 224, 71, 0.2)',
+              borderLeftWidth: '2px',
+              borderTopWidth: '0',
+              borderBottomWidth: '0',
+              backgroundColor: 'rgba(75, 85, 99, 0.1)',
+              borderColor: '#ed3827',
+              paddingLeft: 'calc(1.1rem - 2px)',
             },
 
             u: {
@@ -139,6 +148,15 @@ const config: Config = {
               a: {
                 color: '#ed3827',
               },
+              'p::before': {
+                display: 'none',
+              },
+            },
+            aside: {
+              margin: '24px 0px 8px',
+              padding: '16px 40px 32px',
+              borderRadius: 4,
+              backgroundColor: theme('colors.gray.100'),
             },
           },
         },

@@ -6,7 +6,7 @@ interface Props {
   post: Post
 }
 
-export const PostHeader = ({ post }: Props) => {
+const PostHeader = ({ post }: Props) => {
   const updatedAt = format(new Date(post.date), 'yyyy년 MM월 dd일')
   return (
     <header>
@@ -36,3 +36,5 @@ export const PostHeader = ({ post }: Props) => {
     </header>
   )
 }
+
+export default PostHeader

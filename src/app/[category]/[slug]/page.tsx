@@ -1,8 +1,7 @@
 import ShareButton from '@/components/common/ShareButton'
-import { PostBody } from '@/components/post_detail/PostBody'
-import { PostHeader } from '@/components/post_detail/PostHeader'
-import { getPostDetail, getPostPaths, parsePostAbstract } from '@/lib/posts'
+import { getPostDetail, getPostPaths, parsePost } from '@/lib/posts'
 import { Metadata } from 'next'
+import dynamic from 'next/dynamic'
 
 type Props = {
   params: { category: string; slug: string }
@@ -31,14 +30,19 @@ export async function generateMetadata({ params: { category, slug } }: Props): P
   }
 }
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
   const postPaths: string[] = getPostPaths()
-  const paramList = postPaths
-    .map(path => parsePostAbstract(path))
-    .map(item => ({ category: item.categoryPath, slug: item.slug }))
+  const paramList = await Promise.all(
+    postPaths.map(async path => {
+      const post = await parsePost(path)
+      return { category: post.categoryPath, slug: post.slug }
+    })
+  )
   return paramList
 }
 
+const PostHeader = dynamic(() => import('@/components/post_detail/PostHeader'), { ssr: false })
+const PostBody = dynamic(() => import('@/components/post_detail/PostBody'), { ssr: false })
 const PostDetail = async ({ params: { category, slug } }: Props) => {
   const post = await getPostDetail(category, slug)
   return (

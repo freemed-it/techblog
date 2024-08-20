@@ -1,0 +1,379 @@
+---
+tags: [Gatsby, 리브랜딩]
+thumbnail: 'posts/tech/homepage-gatsby/thumbnail.png'
+title: 'Gatsby를 활용한 프리메드 홈페이지 리뉴얼 개발기'
+description: '리브랜딩과 함께 개편한 프리메드 홈페이지 개발 경험을 공유합니다.'
+profile: 'posts/tech/homepage-gatsby/profile.png'
+author: '이승희 · 사무국'
+date: 2024-08-20
+---
+
+지난 10월, [프리메드 홈페이지](https://freemed.or.kr/)가 새로운 모습으로 단장했습니다. 리브랜딩 프로젝트를 통해 ‘청년들이 그려가는 모두가 건강한 세상’이라는 비전하에 앞으로 나아갈 방향을 설계했어요. 프리메드가 어떤 조직인지, 어떤 세상을 꿈꾸는지를 잘 보여주기 위해 홈페이지에도 여러 변화가 있었습니다.
+
+그래서 이전 홈페이지와 비교했을 때 바뀐 부분과 당시 고려한 점, Gatsby를 어떻게 활용했는지, 개발하며 겪었던 이슈 등을 이야기해 보려고 합니다. 리브랜딩 프로젝트 이후에도 리팩토링까지 진행하면서 개발 파트는 어떤 고민을 하고 어떻게 해결해 나갔는지 저희의 경험을 풀어보려 해요.
+
+## 기술 스택의 변화
+
+주요 개발 프레임워크 및 라이브러리는 아래와 같이 바뀌었습니다.
+
+- **Gatsby** v2 → v5
+- JavaScript → **TypeScript**
+- CSS Module → **styled-components**
+- **AOS** 🆕
+- **Swiper** 🆕
+
+### Gatsby 기반 홈페이지
+
+Gatsby는 React 기반 오픈 소스 프레임워크이자 대표적인 정적 사이트 생성기(SSG, Static Site Generator)입니다. 빌드 과정에서 HTML 페이지를 미리 구축하고 콘텐츠 전송 네트워크(CDN)을 통해 제공하기 때문에 사용자 경험이 빠르고 안전한 웹사이트를 구축할 수 있어요. 특히 GraphQL을 사용해 필요한 데이터를 가져와 페이지를 생성하고, Gatsby에서 제공하는 다양한 기능으로 성능 최적화가 가능하다는 장점이 있어요.
+
+프리메드는 이미 Gatsby 기반 홈페이지를 운영하고 있었어요. 프레임워크에 대한 이해가 있기 때문에 Gatsby는 유지하면서 마이그레이션 하는 것으로 결정했습니다. [Gatsby 버전 업데이트](https://www.gatsbyjs.com/docs/reference/release-notes/migrating-from-v4-to-v5/)와, [타입스크립트 적용](https://www.gatsbyjs.com/docs/how-to/custom-configuration/typescript/#migrating-to-typescript), [MDX를 이용](https://www.gatsbyjs.com/docs/how-to/routing/migrate-remark-to-mdx/)하는 등의 변화가 있었어요. 또한, Gatsby 5 버전부터 필수인 Node와 React 버전도 모두 18 버전으로 업데이트했습니다. 마이그레이션은 공식 문서를 참고해 진행했습니다.
+
+### 스타일링 및 라이브러리 선정
+
+스타일링의 경우 props를 이용해 동적 스타일링이 가능한 **styled-components**로 결정했어요. CSS-in-JS이기 때문에 CSS 코드로 변환하는 과정이 필요해 느릴 수 있지만, CSS Module 방식과 달리 css 파일을 필요로 하지 않아 파일 관리 측면에서 장점이 있어 채택했습니다. Gatsby에서는 플러그인을 설치하면 쉽게 이용할 수 있습니다.
+
+```bash
+yarn add gatsby-plugin-styled-components styled-components babel-plugin-styled-components
+```
+
+신규 홈페이지에는 여러 애니메이션 효과와 이미지 슬라이드가 생겼는데요! 스크롤 애니메이션은 [AOS](https://michalsnik.github.io/aos/), 이미지 슬라이드로는 [Swiper](https://swiperjs.com/)를 추가했습니다. 두 라이브러리 모두 쉽게 적용하고 유연하게 커스터마이징할 수 있었습니다.
+
+## 프로젝트 구조 논의
+
+![사이트맵을 보시면 홈페이지의 변화를 한눈에 보실 수 있어요!](/posts/tech/homepage-gatsby/1.png)
+
+이렇게 프로젝트 규모가 커진 만큼 잘 관리하는 것도 중요해졌습니다. 장기적인 유지보수를 고려해 더 나은 폴더 구조는 없을지 고민하게 되었는데요. 정답이 없는 부분이라 시행착오를 겪기도 했어요.
+
+### 과거 홈페이지 구조
+
+```bash
+src
+└── components
+└── config
+└── contents
+└── images
+└── pages
+	└── notice
+		└── 1.md
+		└── 2.md
+		└── index.js
+└── styles
+└── templates
+	└── notice-page.js
+gatsby-browser.js
+gatsby-ssr.js
+gatsby-config.js
+gatsby-node.js
+```
+
+- **src/contents**: 페이지가 아닌 데이터(마크다운)
+- **src/pages**: 실제 라우팅되는 페이지 + 페이지로 만들 마크다운
+- **src/templates**: pages 폴더의 마크다운을 페이지로 보여주기 위한 템플릿
+
+기존에는 pages 폴더 안에 실제 라우팅 되는 페이지와 gatsby-node.js 파일에서 `createPages`로 페이지를 만들 마크다운 파일이 혼재되어 있었습니다. 예를 들어, 공지사항에서 목록을 보여주는 index.js와 상세 마크다운 파일(1.md)이 같은 폴더에 있었어요. 그리고 목록 페이지 UI는 index.js를, 상세 페이지 UI는 templates 폴더의 notice-page.js를 확인해야 합니다. 이때 pages 폴더에 마크다운이 있는 점이 애매하다고 생각했어요. 그리고 데이터가 pages, contents 폴더에 나눠져 있어 프로젝트를 한눈에 파악하기 어려웠어요.
+
+또한, components 폴더에 속한 컴포넌트들은 styled-components로, templates 폴더에 속한 템플릿은 CSS Module로 구현되어 styles 폴더를 참고해야 했습니다. 하나의 프로젝트에서 스타일링 방식이 2개인 것과 더불어 templates 폴더가 GNB 구성과 다르게 1depth인 점이 프로젝트를 이해하는 데 시간이 걸리게 했어요.
+
+### 현재 홈페이지 구조
+
+```bash
+content
+└── announcement/notice
+  └── 1.mdx
+  └── 2.mdx
+  └── header.png
+src
+└── components
+└── constants
+└── hooks
+└── images
+└── pages
+  └── announcement
+    └── notice.tsx
+└── styles
+└── templates
+	└── announcement
+		└── notice.tsx
+gatsby-browser.tsx
+gatsby-ssr.tsx
+gatsby-config.ts
+gatsby-node.ts
+```
+
+- **content**: 마크다운, 이미지 등 콘텐츠 리소스
+- **src/pages**: 실제 라우팅 되는 페이지
+- **src/templates**: 마크다운을 페이지로 보여주기 위한 템플릿
+
+리뉴얼 프로젝트에서는 mdx 파일과 이미지를 하나의 페이지를 만드는 콘텐츠로 보고 폴더로 묶어 관리했습니다. mdx 파일에서 이미지 경로를 불러오기 때문에 같은 폴더에 있어야 더 쉽게 찾을 수 있기도 했어요. 결과적으로 UI로 보여지는 건 pages와 templates 폴더에, 데이터는 모두 content 폴더에 위치하게 되었습니다.
+
+또한 content, src/components, src/pages, src/templates 모두 하위 폴더를 페이지 경로와 동일하게 가져가 파일 경로만으로 어떤 페이지에 연관된 리소스인지 알 수 있게 되었어요. 그리고 CSS 작성 방식도 CSS-in-JS로 통일해 개발을 진행했습니다.
+
+## Gatsby 활용하기
+
+### MDX
+
+홈페이지에는 같은 형식의 반복적인 데이터가 많아 frontmatter를 적극적으로 활용했어요. 페이지 제목, 설명 등 모든 페이지에서 쓰이는 정보를 기본 포맷으로 두고 확장해 나갔습니다. 각 페이지에서는 GraphQL 쿼리로 데이터를 불러와 사용하면 돼요.
+
+```markdown
+---
+template: company/corporation <!-- 페이지가 될 템플릿 키 -->
+title: 법인개요 <!-- 페이지 제목 -->
+desc: 사람과 실천을 연결하는 다리가 되어, ... <!-- 페이지 설명 -->
+headerImg: ./header.png <!-- 헤더 이미지 경로 -->
+---
+```
+
+마크다운 형식을 그대로 보여줄 경우 `MdxProvider`로 감싼 후 `children`을 그대로 넣어주면 됩니다. 아래는 공지사항, 연간 기부금 페이지에 사용된 코드예요.
+
+```tsx
+const NoticeTemplate = ({ data: { mdx }, children, path }: PageProps<Queries.NoticeTemplateQuery>) => {
+  return <MDXProvider>{children}</MDXProvider>
+}
+
+export const query = graphql`
+  query NoticeTemplate($id: String!) {
+    mdx(id: { eq: $id }) {
+      frontmatter {
+        title
+        date(formatString: "YYYY.MM.DD")
+        attachments {
+          text
+          link
+        }
+      }
+    }
+  }
+`
+```
+
+이때 GraphQL의 **`fragment`** 를 이용하면 쿼리에서 중복되는 코드를 줄일 수 있어요. 저희는 위 기본 포맷 중 title, desc, headerImg를 fragment로 정의해 사용했습니다.
+
+```tsx title="fragment 정의"
+export const MdxFrontmatter = graphql`
+  fragment MdxFrontmatter on Mdx {
+    frontmatter {
+      title
+      desc
+      headerImg {
+        childImageSharp {
+          gatsbyImageData
+        }
+      }
+    }
+  }
+`
+```
+
+```tsx title="쿼리"
+export const query = graphql`
+  query CorporationPage($id: String!) {
+    mdx(id: { eq: $id }) {
+      ...MdxFrontmatter
+    }
+  }
+`
+```
+
+### gatsby-plugin-image
+
+Gatsby에서 제공하는 `gatsby-plugin-image` 플러그인을 활용하면 최적화된 이미지를 자동으로 불러올 수 있습니다. 아래와 같이 마크다운의 frontmatter에 이미지 경로를 넣고 쿼리로 불러오면 됩니다. 대부분 페이지를 마크다운 기반으로 만들었기 때문에 많은 양의 이미지를 효율적으로 다룰 수 있었어요.
+
+```markdown
+---
+bannner: ./banner.png
+---
+```
+
+```tsx
+const OrganizationPage = ({ data, path }: PageProps<Queries.OrganizationPageQuery>) => {
+  return <GatsbyImage alt="배너" image={getImage(banner)} className="banner-image-wrapper" />
+}
+
+export const query = graphql`
+  query OrganizationPage($id: String!) {
+    mdx(id: { eq: $id }) {
+      frontmatter {
+        banner {
+          childImageSharp {
+            gatsbyImageData
+          }
+        }
+      }
+    }
+  }
+`
+```
+
+위의 **`getImage()`** 는 플러그인에서 제공하는 함수로 gatsbyImageData를 바로 가져올 수 있어요.
+
+또 다른 유틸리티 함수로는 **`withArtDirection()`** 이 있어요. 조직도처럼 화면 크기에 따라 이미지가 다른 경우 이 메서드를 이용하면 쉽게 처리할 수 있습니다.
+
+```tsx
+const OrganizationImage = ({ img }) => {
+  const images = withArtDirection(getImage(img.mobile), [
+    {
+      media: theme.device.tablet,
+      image: getImage(img.tablet),
+    },
+  ])
+
+  return <GatsbyImage image={images} alt="조직도" className="org-image" />
+}
+```
+
+![이런 식으로요!](/posts/tech/homepage-gatsby/2.png)
+
+### Typegen - 자동으로 타입 생성하기
+
+타입 정의할 때 유용한 기능으로 gatsby-config.ts에서 **`graphqlTypegen: true`** 옵션을 설정하면 자동으로 타입을 생성해 줍니다.
+
+서버를 시작하면 `success Generating GraphQL and TypeScript types` 로그와 함께 src 폴더 아래에 **gatsby-types.d.ts** 파일이 자동으로 생성된 것을 보실 수 있어요. (이 파일은 .gitignore에 포함하는 것을 권장해요!)
+
+> gatsby-node.ts에서 createPages API를 이용해서 mdx로 페이지를 만드는데요, 이때 해당 쿼리에도 이름을 붙여줘야 합니다. 저는 이 부분을 놓쳐 삽질을 꽤 했답니다.. 💦
+
+사용할 때는 Queries로 접근하고 지정한 쿼리 이름을 불러오면 됩니다.
+
+```tsx
+const RecruitGuidePage = ({ data: { mdx }, path }: PageProps<Queries.RecruitGuidePageQuery>) => {
+  const { title, headerImg, guide, talent, schedule } = { ...mdx?.frontmatter }
+}
+
+export const query = graphql`
+  query RecruitGuidePage($id: String!) {
+    ...
+  }
+`
+```
+
+참고로 Typegen으로 생성한 타입은 명시적으로 선언하지 않는 이상 모두 Nullable해요. 저희는 구조 분해 할당으로 값을 담고자 했기 때문에 null일 수 있는 변수에는 위와 같이 전개 구문을 이용해 타입 관련한 에러를 방지할 수 있었습니다.
+
+### SEO
+
+**Head API**를 이용하면 `<head>` 태그 안에 내용을 쉽게 넣을 수 있어요. 아래 코드와 같이 페이지마다 Head 함수를 export하면 됩니다. (컴포넌트에서는 안 돼요!)
+
+```tsx
+export const Head = ({ data: { mdx }, location: { pathname } }) => {
+  const { title, desc } = { ...mdx?.frontmatter }
+  return <SEO title={title} description={desc} path={pathname} />
+}
+```
+
+```tsx
+const SEO = ({ title, description, path }) => {
+  return (
+    <>
+      <title>{title}</title>
+      <meta name="description" content={description} />
+    </>
+  )
+}
+```
+
+마크다운의 frontmatter에서 정의한 title, desc 데이터를 여기서도 이용했는데요. SEO 컴포넌트에 props로 전달해 각 페이지에 맞는 메타 태그를 삽입할 수 있었습니다.
+
+그 외에도 SEO 설정 시 유용했던 플러그인을 소개합니다!
+
+- [gatsby-plugin-google-gtag](https://www.gatsbyjs.com/plugins/gatsby-plugin-google-gtag/)
+  : Google Analytics 적용
+- [gatsby-plugin-sitemap](https://www.gatsbyjs.com/plugins/gatsby-plugin-sitemap/)
+  : sitemap 생성
+- [gatsby-plugin-robots-txt](https://www.gatsbyjs.com/plugins/gatsby-plugin-robots-txt/)
+  : 빌드 시 robots.txt 생성
+
+## 개발하며 마주한 이슈들
+
+### GitHub Action 캐싱으로 빌드 시간 줄이기
+
+홈페이지는 자동 배포를 위해 GitHub Action 워크플로를 이용하고 있습니다. main 브랜치에 머지하면 빌드-배포 과정을 거치게 돼요. SSG 특성상 한 글자만 수정해도 이 과정을 반복해야 하는데, 문제는 늘어난 빌드 시간이었어요.
+
+이때 GitHub Action의 캐싱을 이용하면 불필요하게 반복되는 시간을 줄일 수 있습니다. `public`, `.cache` 폴더를 추가해 평소 16분에서 2분 30초로 시간을 단축했습니다.
+
+```yaml
+- name: Cache Gatsby
+  id: gatsby-cache
+  uses: actions/cache@v3
+  with:
+    path: |
+      public
+      .cache
+    key: ${{ runner.os }}-gatsby-${{ github.run_id }}
+    restore-keys: |
+      ${{ runner.os }}-gatsby
+```
+
+### 반응형 디자인 적용 시 고려해야할 부분
+
+![후원 안내 페이지의 모바일 버전, 데스크탑 버전이에요!](/posts/tech/homepage-gatsby/4.png)
+
+이전 홈페이지는 모바일 환경에 최적화되어 있지 않아 불편하다는 문제점이 있었습니다. 실제로도 데스크탑보다 모바일 이용자가 더 많았기 때문에 모바일 친화적으로 만드는 것이 중요했어요. 따라서 다양한 기기에 대응하기 위해 반응형 디자인을 도입하게 되었습니다.
+
+처음에는 데스크탑 버전의 디자인만 보고 반응형으로 개발했는데, 여러 요구사항이 생기면서 고려해야 할 부분이 많아졌어요. 디자이너분께 반응형 디자인의 필요성을 설명해 드리고 논의 끝에 모바일, 태블릿, 데스크탑 버전의 디자인으로 진행하게 되었습니다.
+
+- **모바일** (0 ~ 767px): 375px 기준 디자인 적용
+- **태블릿** (768px ~ 1023px): 768px 기준 디자인 적용
+- **데스크탑** (1024px ~): 1024 기준 디자인 적용
+
+브레이크 포인트를 기준으로 단순히 폰트 크기가 변한다거나, 큰 화면에서 가로로 나열된 요소들이 작은 화면에서 세로로 나열되는 것 외에도 강조를 위한 줄 바꿈, 여백, 정렬 등을 신경 써야 했습니다.
+
+이때 디자인은 큰 화면을 먼저 만들고 작은 화면으로 줄여가는 방식으로 작업하는 반면, 개발은 작은 화면을 기준으로 작업 후 미디어 쿼리로 큰 화면에 대응하게끔 구현했는데요. 브레이크 포인트를 기점으로 바뀌는 요소들이 많았기 때문에 이 싱크가 맞았다면 논의가 조금 더 수월했을 것 같아요.
+
+### 공통 스타일 정의와 텍스트 컴포넌트로 반복되는 코드 줄이기
+
+기획과 디자인을 진행하다 보니 강조해야 할 문구와 그 쓰임새가 점점 많아지면서 개발할 때 중복되는 코드가 늘어났습니다. 디자인 시스템으로 따로 관리하면 좋겠다는 의견이 나왔고, 디자이너분과 논의 끝에 공통 스타일을 정의해 이를 적용한 텍스트 컴포넌트를 만들었어요.
+
+```tsx title="스타일 정의 및 컴포넌트 코드"
+const textStyle = {
+  title0: {
+    fontWeight: 800,
+    fontSize: '50px',
+    lineHeight: '74px',
+  },
+}
+
+const Text = ({ as, children, variant }) => {
+  return isHTML ? (
+    <TextLayout as={as} variant={variant} dangerouslySetInnerHTML={{ __html: children }} />
+  ) : (
+    <TextLayout as={as} variant={variant}>
+      {children}
+    </TextLayout>
+  )
+}
+
+const Layout = styled.p`
+  font-weight: ${props => props.theme.textStyle[props.variant[0]].fontWeight};
+  font-size: ${props => props.theme.textStyle[props.variant[0]].fontSize};
+  line-height: ${props => props.theme.textStyle[props.variant[0]].lineHeight};
+  @media ${({ theme }) => theme.device.tablet} {
+    font-weight: ${props => props.theme.textStyle[props.variant[1]].fontWeight};
+    font-size: ${props => props.theme.textStyle[props.variant[1]].fontSize};
+    line-height: ${props => props.theme.textStyle[props.variant[1]].lineHeight};
+  }
+  @media ${({ theme }) => theme.device.laptop} {
+    font-weight: ${props => props.theme.textStyle[props.variant[2]].fontWeight};
+    font-size: ${props => props.theme.textStyle[props.variant[2]].fontSize};
+    line-height: ${props => props.theme.textStyle[props.variant[2]].lineHeight};
+  }
+`
+```
+
+```tsx
+<Text as="h3" variant={['title6', 'title4', 'title2']}>
+  {children}
+</Text>
+```
+
+이렇게 텍스트 컴포넌트의 variant props에 반응형 스타일을 모바일, 태블릿, 데스크탑 순서대로 넣어 간단하게 적용할 수 있게 되었습니다. 점점 props가 늘긴 했지만, 확실히 정리하고 나니 훨씬 편하게 스타일을 적용할 수 있게 되었고, 개발 속도도 빨라졌어요.
+
+## 리뉴얼을 마치며
+
+리뉴얼을 마치고 나니 변경된 부분이 워낙 많아 ‘Gatsby 프로젝트를 새로 시작해도 좋았겠다’라는 생각이 들었는데요.(프로젝트 중간에 Gatsby 버전이 업그레이드되어 다시 업데이트하기도 했어요.) 사실 이 부분은 초반에 예상하지 못한 부분이기도 하고, 마이그레이션 해보며 배운 점도 많아 좋은 경험이 되었습니다!
+
+또한, 홈페이지 리뉴얼 프로젝트에서는 브랜치 룰, 네이밍 등 간단한 개발 컨벤션으로 진행했는데요, 이렇게만 하기에는 추후 들어올 팀원들이 프로젝트를 유지하기 부족하다는 생각이 들었습니다. 팀 자체의 문화로 자리잡혀 있지 않아 히스토리를 파악하기 어렵고 혼란스러운 경험을 줄지도 모르니까요. 그래서 새로운 개발 컨벤션을 처음부터 다시 짜게 되었고 저희만의 규칙을 만들면서 IT팀의 방향과 지속성도 함께 고민하는 계기가 되었습니다. ~~(나중에 팀 개발 문화를 소개하는 글도 작성해 볼게요!)~~
+
+이렇게 프리메드 홈페이지 리뉴얼 프로젝트를 통해 Gatsby를 잘 쓸 수 있는 방법과 팀에 대한 고민을 함께 해볼 수 있었습니다. 우리를 잘 보여줄 수 있는 홈페이지가 되었으니, 이제는 잘 유지하고 발전시키는 일들이 남았어요.
+
+**앞으로도 변화할 프리메드 홈페이지에 많은 관심 가져주세요! ✨**
+
+> Gatsby 활용에 많은 참고가 된 블로그입니다. 감사합니다!
+> https://junghyeonsu.com/posts/gatsby-shovels-and-hacks/

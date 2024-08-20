@@ -1,13 +1,17 @@
-import Header from '@/components/common/Header'
 import { Post } from '@/config/types'
 import { getPostList } from '@/lib/posts'
-import dynamic from 'next/dynamic'
+import Header from '../common/Header'
+import PostCard from './PostCard'
 
-const PostCard = dynamic(() => import('@/components/post_list/PostCard'), { ssr: false })
-export default async function Main() {
-  const postList = await getPostList('/')
+interface PostListProps {
+  category?: string
+}
+
+const PostList = async ({ category }: PostListProps) => {
+  const postList = await getPostList(category)
+
   return (
-    <div>
+    <>
       <Header />
       <section className="mx-auto flex flex-col items-center px-5 md:max-w-3xl">
         <ul className="w-full pb-14">
@@ -16,6 +20,8 @@ export default async function Main() {
           ))}
         </ul>
       </section>
-    </div>
+    </>
   )
 }
+
+export default PostList
